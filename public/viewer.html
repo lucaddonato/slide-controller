@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Viewer</title>
+
+  <style>
+    @font-face {
+    font-family: "NewYorkSmall";
+    src: url("/fonts/NewYorkSmall-Bold.otf") format("opentype");
+    font-weight: normal;
+    font-style: normal;
+    }
+
+    body {
+    font-family: "NewYorkSmall", serif;
+    }
+
+
+    html, body {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    #container {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 24px; /* espaço de respiro */
+        box-sizing: border-box;
+    }
+
+    .slide {
+        max-width: 900px;      /* 👈 ISSO é o segredo */
+        width: 100%;
+        text-align: center;
+        animation: fadeIn 0.6s ease;
+    }
+
+    h1 {
+        font-size: clamp(2rem, 5vw, 3.5rem);
+        margin-bottom: 16px;
+    }
+
+    p {
+        font-size: clamp(1.2rem, 3vw, 1.8rem);
+    }
+
+    img {
+        max-width: 100%;
+        height: auto;
+        margin-top: 24px;
+    }
+
+    @keyframes fadeIn {
+        from {
+        opacity: 0;
+        transform: translateY(10px);
+        }
+        to {
+        opacity: 1;
+        transform: translateY(0);
+        }
+    }
+
+    /* MOBILE */
+    @media (max-width: 768px) {
+    #container {
+        align-items: flex-start;   /* 👈 tira o centro vertical */
+        padding-top: 40px;         /* espaço inicial */
+    }
+
+    .slide {
+        text-align: center;
+    }
+    }
+
+    </style>
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="slide">Aguardando...</div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+
+    socket.on("updateSlide", (html) => {
+      const slide = document.getElementById("slide");
+
+      // força re-render da animação
+      slide.innerHTML = "";
+      void slide.offsetWidth;
+
+      slide.innerHTML = html;
+    });
+  </script>
+</body>
+</html>

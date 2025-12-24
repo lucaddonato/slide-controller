@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin</title>
+
+  <style>
+    @font-face {
+      font-family: "NewYorkSmall";
+      src: url("/fonts/NewYorkSmall-Bold.otf") format("opentype");
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    body {
+      font-family: "NewYorkSmall", serif;
+    }
+
+    /* (opcional, mas recomendado) */
+    #slide {
+      margin-top: 20px;
+    }
+
+    .controls {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin: 24px 0;
+    }
+
+    .controls button {
+    font-family: "NewYorkSmall", serif;
+    font-size: 1.4rem;
+    padding: 16px 32px;
+    border-radius: 999px; /* bem arredondado */
+    border: none;
+    cursor: pointer;
+
+    background-color: #111;
+    color: #fff;
+
+    transition: transform 0.15s ease, background-color 0.15s ease;
+    }
+
+    .controls button:hover {
+    background-color: #333;
+    transform: scale(1.05);
+    }
+
+    .controls button:active {
+    transform: scale(0.97);
+    }
+
+  </style>
+</head>
+
+<body>
+    <h1>Controle</h1>
+
+    <div class="controls">
+    <button onclick="prev()">⬅ Voltar</button>
+    <button onclick="next()">Avançar ➡</button>
+    </div>
+
+
+  <hr>
+
+  <h2>Slide atual:</h2>
+  <div id="slide"
+       style="border:1px solid #ccc; padding:20px; font-size:18px;">
+    Aguardando...
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+
+    function next() {
+      socket.emit("next");
+    }
+
+    function prev() {
+      socket.emit("prev");
+    }
+
+    // 👇 AGORA O ADMIN TAMBÉM VÊ O SLIDE
+    socket.on("updateSlide", (html) => {
+    document.getElementById("slide").innerHTML = html;
+    });
+
+  </script>
+</body>
+</html>
